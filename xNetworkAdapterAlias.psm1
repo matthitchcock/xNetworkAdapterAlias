@@ -6,7 +6,7 @@
         [String]$AliasName
     )
 
-    [Array]$Adapter = (NetAdapter\Get-NetAdapter) | Where-Object {$PSItem.MacAddress -eq $MacAddress}
+    [Array]$Adapter = (NetAdapter\Get-NetAdapter) | Where-Object {($psitem.Virtual -eq $false) -and ($PSItem.MacAddress -eq $MacAddress)}
 
     if ($Adapter.Count -eq 1)
     {
@@ -32,7 +32,7 @@ Function Set-xNetworkAdapterAlias
         [String]$AliasName
     )
 
-    [Array]$Adapter = (NetAdapter\Get-NetAdapter) | Where-Object {$PSItem.MacAddress -eq $MacAddress}
+    [Array]$Adapter = (NetAdapter\Get-NetAdapter) | Where-Object {($psitem.Virtual -eq $false) -and ($PSItem.MacAddress -eq $MacAddress)}
 
     if ($Adapter.Count -eq 1)
     {
@@ -54,12 +54,10 @@ Function Test-xNetworkAdapterAlias
 
     [Boolean]$Result = $false
 
-    if (((NetAdapter\Get-NetAdapter) | Where-Object {$psitem.MacAddress -eq $MacAddress}).Name -eq $AliasName)
+    if ((NetAdapter\Get-NetAdapter | Where-Object {($psitem.Virtual -eq $false) -and ($psitem.MacAddress -eq $MacAddress)}).Name -eq $AliasName)
     {
         $Result = $true
     }
 
     Return $Result
 }
-
-Export-ModuleMember *
